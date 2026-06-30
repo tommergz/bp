@@ -150,7 +150,7 @@ textarea {
 
 .chart-row {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  grid-template-columns: 1.5fr 0.9fr 1fr 1fr 1fr;
   gap: 12px;
   padding: 10px;
   background: #f8fafc;
