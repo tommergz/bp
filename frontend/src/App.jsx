@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -21,6 +21,7 @@ function App() {
   const [rangeFrom, setRangeFrom] = useState(todayString());
   const [rangeTo, setRangeTo] = useState(todayString());
   const [measurements, setMeasurements] = useState([]);
+  const [expandedRows, setExpandedRows] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -103,20 +104,37 @@ function App() {
     setNotes('');
   };
 
-  const groupedByDate = useMemo(() => {
-    return measurements.reduce((acc, item) => {
-      const key = item.date;
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(item);
-      return acc;
-    }, {});
-  }, [measurements]);
+  const [expandedRows, setExpandedRows] = useState([]);
 
   const formatTime = (value) => {
     if (!value) return '-';
     const date = new Date(value);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
+
+  const measurementsWithTime = useMemo(
+    () =>
+      measurements.map((item) => ({
+        ...item,
+        time: formatTime(item.created_at),
+      })),
+    [measurements]
+  );
+
+  const toggleNotes = (id) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+    );
+  };
+
+  const groupedByDate = useMemo(() => {
+    return measurementsWithTime.reduce((acc, item) => {
+      const key = item.date;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+  }, [measurementsWithTime]);
 
   const chartPoints = useMemo(() => {
     return measurements
@@ -245,20 +263,37 @@ function App() {
                     <table>
                       <thead>
                         <tr>
+                          <th>Время</th>
                           <th>Сист.</th>
                           <th>Диаст.</th>
                           <th>Пульс</th>
-                          <th>Примечания</th>
+                          <th className="notes-column">Примечания</th>
+                          <th className="notes-toggle-column">Заметки</th>
                         </tr>
                       </thead>
                       <tbody>
                         {items.map((item) => (
-                          <tr key={item.id}>
-                            <td>{item.systolic}</td>
-                            <td>{item.diastolic}</td>
-                            <td>{item.pulse}</td>
-                            <td>{item.notes || '-'}</td>
-                          </tr>
+                          <Fragment key={item.id}>
+                            <tr className="measurement-row">
+                              <td data-label="Время">{item.time}</td>
+                              <td data-label="Сист.">{item.systolic}</td>
+                              <td data-label="Диаст.">{item.diastolic}</td>
+                              <td data-label="Пульс">{item.pulse}</td>
+                              <td className="notes-column" data-label="Примечания">{item.notes || '-'}</td>
+                              <td className="notes-toggle-column">
+                                {item.notes ? (
+                                  <button className="toggle-notes" onClick={() => toggleNotes(item.id)}>
+                                    {expandedRows.includes(item.id) ? 'Скрыть' : 'Показать'}
+                                  </button>
+                                ) : '-'}
+                              </td>
+                            </tr>
+                            {expandedRows.includes(item.id) && item.notes && (
+                              <tr className="notes-row">
+                                <td colSpan={6}>{item.notes}</td>
+                              </tr>
+                            )}
+                          </Fragment>
                         ))}
                       </tbody>
                     </table>

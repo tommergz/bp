@@ -139,6 +139,18 @@ textarea {
   background: #f9fbff;
 }
 
+.toggle-notes {
+  background: #2563eb;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.toggle-notes:hover {
+  background: #1d4ed8;
+}
+
 .chart-card {
   margin-top: 24px;
 }
@@ -217,5 +229,63 @@ textarea {
 
   .chart-row {
     grid-template-columns: 1fr;
+  }
+
+  .data-section .calendar-grid {
+    display: grid;
+    gap: 18px;
+  }
+
+  .day-card table,
+  .day-card thead,
+  .day-card tbody,
+  .day-card th,
+  .day-card td,
+  .day-card tr {
+    display: block;
+    width: 100%;
+  }
+
+  .day-card thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .day-card tr {
+    margin-bottom: 14px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+  }
+
+  .day-card td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border: none;
+    text-align: left;
+  }
+
+  .day-card td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #475569;
+    margin-right: 12px;
+  }
+
+  .notes-row td {
+    padding: 12px 0;
+    background: #eef2ff;
+    border-radius: 12px;
+  }
+
+  .notes-column {
+    display: none;
+  }
+
+  .notes-toggle-column {
+    display: block;
   }
 }
