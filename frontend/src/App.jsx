@@ -126,12 +126,22 @@ function App() {
   };
 
   const groupedByDate = useMemo(() => {
-    return measurementsWithTime.reduce((acc, item) => {
+    const groups = measurementsWithTime.reduce((acc, item) => {
       const key = item.date;
       if (!acc[key]) acc[key] = [];
       acc[key].push(item);
       return acc;
     }, {});
+
+    Object.values(groups).forEach((items) => {
+      items.sort((a, b) => {
+        const timeA = new Date(a.created_at || a.date).getTime();
+        const timeB = new Date(b.created_at || b.date).getTime();
+        return timeA - timeB;
+      });
+    });
+
+    return groups;
   }, [measurementsWithTime]);
 
   const chartPoints = useMemo(() => {
