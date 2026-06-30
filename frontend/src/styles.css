@@ -123,8 +123,20 @@ textarea {
 
 .day-card th,
 .day-card td {
-  padding: 10px;
+  padding: 12px 14px;
   border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.day-card th {
+  font-weight: 700;
+  color: #111827;
+  background: #f8fafc;
+}
+
+.day-card tbody tr:hover {
+  background: #f9fbff;
 }
 
 .chart-card {
