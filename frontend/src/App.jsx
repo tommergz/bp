@@ -24,9 +24,8 @@ function App() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const sessionData = supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
+    const sessionData = supabase.auth.session();
+    setSession(sessionData);
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -65,13 +64,13 @@ function App() {
 
   const signIn = async () => {
     setError('');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signIn({ email, password });
     if (error) return setError(error.message);
   };
 
   const signInWithGoogle = async () => {
     setError('');
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+    const { error } = await supabase.auth.signIn({ provider: 'google' });
     if (error) return setError(error.message);
   };
 
