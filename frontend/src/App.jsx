@@ -96,7 +96,7 @@ function App() {
       setError(data.error || 'Failed to save measurement');
       return;
     }
-    setMeasurements((prev) => [...prev, data]);
+    await fetchMeasurements();
     setSystolic('');
     setDiastolic('');
     setPulse('');
@@ -112,8 +112,20 @@ function App() {
     }, {});
   }, [measurements]);
 
+  const formatTime = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   const chartPoints = useMemo(() => {
-    return measurements.map((item) => ({ date: item.date, systolic: item.systolic, diastolic: item.diastolic, pulse: item.pulse }));
+    return measurements.map((item) => ({
+      date: item.date,
+      time: formatTime(item.created_at),
+      systolic: item.systolic,
+      diastolic: item.diastolic,
+      pulse: item.pulse,
+    }));
   }, [measurements]);
 
   if (!supabaseUrl || !supabaseAnonKey) {
@@ -226,6 +238,7 @@ function App() {
             <div className="chart-table">
               <div className="chart-row chart-header">
                 <span>Дата</span>
+                <span>Время</span>
                 <span>Сист.</span>
                 <span>Диаст.</span>
                 <span>Пульс</span>
@@ -234,8 +247,9 @@ function App() {
                 <div className="empty-state">Нет данных для графика.</div>
               ) : (
                 chartPoints.map((point) => (
-                  <div key={`${point.date}-${point.systolic}-${point.diastolic}-${point.pulse}`} className="chart-row">
+                  <div key={`${point.date}-${point.time}-${point.systolic}-${point.diastolic}-${point.pulse}`} className="chart-row">
                     <span>{point.date}</span>
+                    <span>{point.time}</span>
                     <span>{point.systolic}</span>
                     <span>{point.diastolic}</span>
                     <span>{point.pulse}</span>

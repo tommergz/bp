@@ -47,8 +47,8 @@ app.get('/api/measurements', authenticate, async (req, res) => {
     .from('measurements')
     .select('*')
     .eq('user_id', userId)
-    .order('date', { ascending: true })
-    .order('created_at', { ascending: true });
+    .order('date', { ascending: false })
+    .order('created_at', { ascending: false });
 
   if (from) {
     query = query.gte('date', from);
