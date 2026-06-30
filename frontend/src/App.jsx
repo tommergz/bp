@@ -265,8 +265,7 @@ function App() {
                           <th>Сист.</th>
                           <th>Диаст.</th>
                           <th>Пульс</th>
-                          <th className="notes-column">Примечания</th>
-                          <th className="notes-toggle-column">Заметки</th>
+                          <th>Заметки</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -277,18 +276,18 @@ function App() {
                               <td data-label="Сист.">{item.systolic}</td>
                               <td data-label="Диаст.">{item.diastolic}</td>
                               <td data-label="Пульс">{item.pulse}</td>
-                              <td className="notes-column" data-label="Примечания">{item.notes || '-'}</td>
-                              <td className="notes-toggle-column">
-                                {item.notes ? (
-                                  <button className="toggle-notes" onClick={() => toggleNotes(item.id)}>
+                              <td data-label="Заметки" className="notes-column">
+                                <span className="notes-text">{item.notes || '-'}</span>
+                                {item.notes && (
+                                  <button className="toggle-notes notes-toggle-button" onClick={() => toggleNotes(item.id)}>
                                     {expandedRows.includes(item.id) ? 'Скрыть' : 'Показать'}
                                   </button>
-                                ) : '-'}
+                                )}
                               </td>
                             </tr>
                             {expandedRows.includes(item.id) && item.notes && (
                               <tr className="notes-row">
-                                <td colSpan={6}>{item.notes}</td>
+                                <td colSpan={5}>{item.notes}</td>
                               </tr>
                             )}
                           </Fragment>

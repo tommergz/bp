@@ -280,12 +280,83 @@ textarea {
     background: #eef2ff;
     border-radius: 12px;
   }
+}
 
+.notes-column {
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.notes-toggle-button {
+  display: none;
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
   .notes-column {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    max-width: 100%;
   }
 
-  .notes-toggle-column {
+  .notes-text {
     display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .notes-toggle-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .day-card table,
+  .day-card thead,
+  .day-card tbody,
+  .day-card th,
+  .day-card td,
+  .day-card tr {
+    display: block;
+    width: 100%;
+  }
+
+  .day-card thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .day-card tr {
+    margin-bottom: 14px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+  }
+
+  .day-card td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border: none;
+    text-align: left;
+  }
+
+  .day-card td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #475569;
+    margin-right: 12px;
+  }
+
+  .notes-row td {
+    padding: 12px 0;
+    background: #eef2ff;
+    border-radius: 12px;
   }
 }
