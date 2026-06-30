@@ -104,8 +104,6 @@ function App() {
     setNotes('');
   };
 
-  const [expandedRows, setExpandedRows] = useState([]);
-
   const formatTime = (value) => {
     if (!value) return '-';
     const date = new Date(value);
