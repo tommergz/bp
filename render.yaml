@@ -1,0 +1,20 @@
+services:
+  - type: web_service
+    name: bp-backend
+    env: node
+    branch: main
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: SUPABASE_URL
+      - key: SUPABASE_SERVICE_ROLE_KEY
+  - type: static_site
+    name: bp-frontend
+    env: static
+    branch: main
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_SUPABASE_URL
+      - key: VITE_SUPABASE_ANON_KEY
+      - key: VITE_BACKEND_URL

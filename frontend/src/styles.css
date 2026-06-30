@@ -1,0 +1,167 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #111827;
+  background: #f3f4f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #eef2ff;
+}
+
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: #4338ca;
+  color: white;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #3730a3;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  font: inherit;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.auth-card,
+.filter-card,
+.entry-card,
+.day-card,
+.chart-card {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.auth-card {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.auth-card label,
+.entry-card label,
+.filter-card label {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.auth-card h2,
+.entry-card h2,
+.filter-card h2,
+.data-section h2,
+.chart-card h2 {
+  margin-top: 0;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.google-button {
+  margin-top: 8px;
+  width: 100%;
+  background: #22c55e;
+}
+
+.error-box {
+  margin-top: 16px;
+  color: #b91c1c;
+}
+
+.controls {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 24px;
+}
+
+.data-section .calendar-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.day-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.day-card th,
+.day-card td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.chart-card {
+  margin-top: 24px;
+}
+
+.chart-table {
+  display: grid;
+  gap: 8px;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 14px;
+}
+
+.chart-header {
+  font-weight: 700;
+  background: #eef2ff;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-row {
+    grid-template-columns: 1fr;
+  }
+}
