@@ -82,6 +82,7 @@ app.post('/api/measurements', authenticate, async (req, res) => {
         diastolic,
         pulse,
         notes: notes || '',
+        created_at: new Date().toISOString(),
       }
     ])
     .select('id, user_id, date, systolic, diastolic, pulse, notes, created_at');
