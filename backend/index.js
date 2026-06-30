@@ -45,7 +45,7 @@ app.get('/api/measurements', authenticate, async (req, res) => {
 
   let query = supabase
     .from('measurements')
-    .select('*')
+    .select('id, user_id, date, systolic, diastolic, pulse, notes, created_at')
     .eq('user_id', userId)
     .order('date', { ascending: false })
     .order('created_at', { ascending: false });
@@ -72,16 +72,19 @@ app.post('/api/measurements', authenticate, async (req, res) => {
     return res.status(400).json({ error: 'Date, systolic, diastolic and pulse are required' });
   }
 
-  const { data, error } = await supabase.from('measurements').insert([
-    {
-      user_id: userId,
-      date,
-      systolic,
-      diastolic,
-      pulse,
-      notes: notes || ''
-    }
-  ]);
+  const { data, error } = await supabase
+    .from('measurements')
+    .insert([
+      {
+        user_id: userId,
+        date,
+        systolic,
+        diastolic,
+        pulse,
+        notes: notes || '',
+      }
+    ])
+    .select('id, user_id, date, systolic, diastolic, pulse, notes, created_at');
 
   if (error) {
     return res.status(500).json({ error: error.message });
