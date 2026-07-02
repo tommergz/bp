@@ -193,7 +193,7 @@ function App() {
 
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
-    const height = chartPoints.length > 20 ? 1080 : 1080;
+    const height = chartPoints.length > 20 ? 360 : 360;
     return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
   }, [chartPoints.length]);
 
@@ -222,6 +222,7 @@ function App() {
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
   const pointRadius = isMobile ? 4 : 2.8;
+  const fontSizeChart = isMobile ? 14 : 10;
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
@@ -379,14 +380,14 @@ function App() {
                             strokeDasharray={isHighlighted ? '5 5' : '3 4'}
                             strokeWidth={isHighlighted ? '2' : '1'}
                           />
-                          <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize="14" fill="#374151">
+                          <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize={fontSizeChart} fill="#374151">
                             {value}
                           </text>
                           <text
                             x={chartDimensions.width - chartDimensions.marginRight + 12}
                             y={y + 4}
                             textAnchor="start"
-                            fontSize="14"
+                            fontSize={fontSizeChart}
                             fill="#374151"
                           >
                             {value}
@@ -459,7 +460,7 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="14" fill="#475569">
+                        <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
                           {point.date}
                         </text>
                       </g>
