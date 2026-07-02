@@ -360,3 +360,46 @@ textarea {
     border-radius: 12px;
   }
 }
+
+.chart-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.chart-tab {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px 16px;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chart-tab:hover {
+  border-color: #4338ca;
+  color: #4338ca;
+}
+
+.chart-tab.active {
+  background: #4338ca;
+  color: white;
+  border-color: #4338ca;
+}
+
+@media (max-width: 600px) {
+  .chart-tabs {
+    gap: 8px;
+  }
+
+  .chart-tab {
+    min-width: 100px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}

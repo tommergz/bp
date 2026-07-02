@@ -23,6 +23,7 @@ function App() {
   const [measurements, setMeasurements] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [error, setError] = useState('');
+  const [chartType, setChartType] = useState('all'); // 'all', 'bloodPressure', 'pulse'
 
   useEffect(() => {
     const sessionData = supabase.auth.session();
@@ -158,8 +159,11 @@ function App() {
   }, [measurements]);
 
   const chartBounds = useMemo(() => {
+    if (chartType === 'pulse') {
+      return { min: 40, max: 180, range: 140 };
+    }
     return { min: 60, max: 220, range: 160 };
-  }, []);
+  }, [chartType]);
 
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
@@ -253,6 +257,27 @@ function App() {
 
           <section className="chart-card">
             <h2>График</h2>
+            <div className="chart-tabs">
+              <button 
+                className={`chart-tab ${chartType === 'all' ? 'active' : ''}`}
+                onClick={() => setChartType('all')}
+              >
+                Все показатели
+              </button>
+              <button 
+                className={`chart-tab ${chartType === 'bloodPressure' ? 'active' : ''}`}
+                onClick={() => setChartType('bloodPressure')}
+              >
+                Артериальное давление
+              </button>
+              <button 
+                className={`chart-tab ${chartType === 'pulse' ? 'active' : ''}`}
+                onClick={() => setChartType('pulse')}
+              >
+                Пульс
+              </button>
+            </div>
+
             {chartPoints.length === 0 ? (
               <div className="empty-state">Нет данных для графика.</div>
             ) : (
@@ -276,48 +301,77 @@ function App() {
                       <stop offset="100%" stopColor="#fca5a5" />
                     </linearGradient>
                   </defs>
-                  {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160].map((step) => {
-                    const y =
-                      chartDimensions.marginTop +
-                      ((chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom) * (160 - step)) / 160;
-                    const value = 60 + step;
-                    return (
-                      <g key={step}>
-                        <line
-                          x1={chartDimensions.marginLeft}
-                          y1={y}
-                          x2={chartDimensions.width - chartDimensions.marginRight}
-                          y2={y}
-                          stroke="#e2e8f0"
-                          strokeDasharray="3 4"
-                        />
-                        <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#374151">
-                          {value}
-                        </text>
-                      </g>
-                    );
-                  })}
-                  <path
-                    d={buildLinePath('systolic')}
-                    fill="none"
-                    stroke="url(#lineGradientSystolic)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d={buildLinePath('diastolic')}
-                    fill="none"
-                    stroke="url(#lineGradientDiastolic)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d={buildLinePath('pulse')}
-                    fill="none"
-                    stroke="url(#lineGradientPulse)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
+
+                  {(() => {
+                    const steps = [];
+                    for (let i = chartBounds.min; i <= chartBounds.max; i += 30) {
+                      steps.push(i);
+                    }
+                    return steps.map((value) => {
+                      const step = value - chartBounds.min;
+                      const y =
+                        chartDimensions.marginTop +
+                        ((chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom) *
+                          (chartBounds.range - step)) /
+                          chartBounds.range;
+                      const isHighlighted = value === 80 || value === 120;
+                      return (
+                        <g key={value}>
+                          <line
+                            x1={chartDimensions.marginLeft}
+                            y1={y}
+                            x2={chartDimensions.width - chartDimensions.marginRight}
+                            y2={y}
+                            stroke={isHighlighted ? '#ff6b6b' : '#e2e8f0'}
+                            strokeDasharray={isHighlighted ? '5 5' : '3 4'}
+                            strokeWidth={isHighlighted ? '2' : '1'}
+                          />
+                          <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#374151">
+                            {value}
+                          </text>
+                          <text
+                            x={chartDimensions.width - chartDimensions.marginRight + 12}
+                            y={y + 4}
+                            textAnchor="start"
+                            fontSize="10"
+                            fill="#374151"
+                          >
+                            {value}
+                          </text>
+                        </g>
+                      );
+                    });
+                  })()}
+
+                  {(chartType === 'all' || chartType === 'bloodPressure') && (
+                    <>
+                      <path
+                        d={buildLinePath('systolic')}
+                        fill="none"
+                        stroke="url(#lineGradientSystolic)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d={buildLinePath('diastolic')}
+                        fill="none"
+                        stroke="url(#lineGradientDiastolic)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  )}
+
+                  {(chartType === 'all' || chartType === 'pulse') && (
+                    <path
+                      d={buildLinePath('pulse')}
+                      fill="none"
+                      stroke="url(#lineGradientPulse)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                  )}
+
                   {chartPoints.map((point, index) => {
                     const x =
                       chartDimensions.marginLeft +
@@ -337,9 +391,13 @@ function App() {
                         (1 - (point.pulse - chartBounds.min) / chartBounds.range);
                     return (
                       <g key={`${point.timestamp}-${point.systolic}-${point.diastolic}-${point.pulse}`}>
-                        <circle cx={x} cy={ySystolic} r="4" fill="#2563eb" />
-                        <circle cx={x} cy={yDiastolic} r="4" fill="#047857" />
-                        <circle cx={x} cy={yPulse} r="4" fill="#be123c" />
+                        {(chartType === 'all' || chartType === 'bloodPressure') && (
+                          <>
+                            <circle cx={x} cy={ySystolic} r="4" fill="#2563eb" />
+                            <circle cx={x} cy={yDiastolic} r="4" fill="#047857" />
+                          </>
+                        )}
+                        {(chartType === 'all' || chartType === 'pulse') && <circle cx={x} cy={yPulse} r="4" fill="#be123c" />}
                         <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="10" fill="#475569">
                           {point.date}
                         </text>
@@ -348,9 +406,15 @@ function App() {
                   })}
                 </svg>
                 <div className="line-chart-legend">
-                  <span><strong className="legend-dot legend-systolic" /> Систолическое</span>
-                  <span><strong className="legend-dot legend-diastolic" /> Диастолическое</span>
-                  <span><strong className="legend-dot legend-pulse" /> Пульс</span>
+                  {(chartType === 'all' || chartType === 'bloodPressure') && (
+                    <>
+                      <span><strong className="legend-dot legend-systolic" /> Систолическое</span>
+                      <span><strong className="legend-dot legend-diastolic" /> Диастолическое</span>
+                    </>
+                  )}
+                  {(chartType === 'all' || chartType === 'pulse') && (
+                    <span><strong className="legend-dot legend-pulse" /> Пульс</span>
+                  )}
                 </div>
               </div>
             )}
