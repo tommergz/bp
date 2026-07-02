@@ -322,6 +322,7 @@ function App() {
                   width={chartDimensions.width}
                   height={chartDimensions.height}
                   viewBox={`0 0 ${chartDimensions.width} ${chartDimensions.height}`}
+                  preserveAspectRatio="xMidYMid meet"
                 >
                   <defs>
                     <linearGradient id="lineGradientSystolic" x1="0" y1="0" x2="0" y2="1">
