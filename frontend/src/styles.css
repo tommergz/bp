@@ -192,7 +192,7 @@ textarea {
 }
 
 .line-chart {
-  padding: 16px;
+  padding: 8px;
   background: #f8fafc;
   border-radius: 18px;
   overflow-x: auto;
@@ -208,7 +208,7 @@ textarea {
   display: flex;
   justify-content: flex-start;
   gap: 18px;
-  margin-top: 12px;
+  margin-top: 4px;
   flex-wrap: wrap;
   color: #334155;
 }
