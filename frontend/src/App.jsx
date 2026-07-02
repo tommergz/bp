@@ -24,6 +24,7 @@ function App() {
   const [expandedRows, setExpandedRows] = useState([]);
   const [error, setError] = useState('');
   const [chartType, setChartType] = useState('all'); // 'all', 'bloodPressure', 'pulse'
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
 
   useEffect(() => {
     const sessionData = supabase.auth.session();
@@ -34,6 +35,14 @@ function App() {
     });
 
     return () => listener?.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 900);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
@@ -192,8 +201,9 @@ function App() {
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
     const height = 720;
-    return { width, height, marginLeft: 40, marginRight: 90, marginTop: 10, marginBottom: 80 };
-  }, [chartPoints.length]);
+    const marginRight = isMobile ? 50 : 90;
+    return { width, height, marginLeft: 40, marginRight, marginTop: 10, marginBottom: 80 };
+  }, [chartPoints.length, isMobile]);
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';

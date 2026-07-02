@@ -248,6 +248,19 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .line-chart {
+    padding: 4px;
+    background: #f8fafc;
+    border-radius: 18px;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .line-chart-legend {
+    margin-top: 2px;
+  }
+
   .data-section .calendar-grid {
     display: grid;
     gap: 18px;
