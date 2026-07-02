@@ -201,8 +201,9 @@ function App() {
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
     const height = 720;
-    const marginRight = isMobile ? 50 : 90;
-    return { width, height, marginLeft: 40, marginRight, marginTop: 10, marginBottom: 80 };
+    const marginRight = isMobile ? 40 : 90;
+    const marginLeft = isMobile ? 40 : 40;
+    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom: 80 };
   }, [chartPoints.length, isMobile]);
 
   const buildLinePath = (key) => {
