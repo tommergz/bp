@@ -222,6 +222,8 @@ function App() {
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
   const pointRadius = isMobile ? 4 : 2.8;
+
+  const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
     const { width, height, marginLeft, marginRight, marginTop, marginBottom } = chartDimensions;
     const innerWidth = width - marginLeft - marginRight;
