@@ -191,7 +191,7 @@ function App() {
 
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
-    const height = 240;
+    const height = 720;
     return { width, height, marginLeft: 40, marginRight: 20, marginTop: 20, marginBottom: 50 };
   }, [chartPoints.length]);
 
@@ -328,7 +328,7 @@ function App() {
 
                   {(() => {
                     const steps = [];
-                    for (let i = chartBounds.min; i <= chartBounds.max; i += 30) {
+                    for (let i = chartBounds.min; i <= chartBounds.max; i += 10) {
                       steps.push(i);
                     }
                     return steps.map((value) => {
