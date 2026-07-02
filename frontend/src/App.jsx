@@ -203,7 +203,8 @@ function App() {
     const height = 720;
     const marginRight = isMobile ? 40 : 90;
     const marginLeft = isMobile ? 40 : 40;
-    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom: 80 };
+    const marginBottom = isMobile ? 40 : 80;
+    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom };
   }, [chartPoints.length, isMobile]);
 
   const buildLinePath = (key) => {
