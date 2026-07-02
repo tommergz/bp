@@ -198,6 +198,11 @@ textarea {
   overflow-x: auto;
 }
 
+.line-chart.line-chart-scrollable svg {
+  flex-shrink: 0;
+  width: auto;
+}
+
 .line-chart svg {
   width: 100%;
   max-width: 100%;

@@ -193,7 +193,7 @@ function App() {
 
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
-    const height = 270;
+    const height = chartPoints.length > 20 ? 1080 : 1080;
     return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
   }, [chartPoints.length]);
 
@@ -221,7 +221,7 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const buildLinePath = (key) => {
+  const pointRadius = isMobile ? 4 : 2.8;
     if (chartPoints.length === 0) return '';
     const { width, height, marginLeft, marginRight, marginTop, marginBottom } = chartDimensions;
     const innerWidth = width - marginLeft - marginRight;
@@ -331,7 +331,7 @@ function App() {
             {chartPoints.length === 0 ? (
               <div className="empty-state">Нет данных для графика.</div>
             ) : (
-              <div className="line-chart">
+              <div className={`line-chart ${chartPoints.length > 20 ? 'line-chart-scrollable' : ''}`}>
                 <svg
                   width={chartDimensions.width}
                   height={chartDimensions.height}
@@ -444,16 +444,16 @@ function App() {
                       <g key={`${point.timestamp}-${point.systolic}-${point.diastolic}-${point.pulse}`}>
                         {(chartType === 'all' || chartType === 'bloodPressure') && (
                           <>
-                            <circle cx={x} cy={ySystolic} r="4" fill="#2563eb">
+                            <circle cx={x} cy={ySystolic} r={pointRadius} fill="#2563eb">
                               <title>Систолическое: {point.systolic}</title>
                             </circle>
-                            <circle cx={x} cy={yDiastolic} r="4" fill="#047857">
+                            <circle cx={x} cy={yDiastolic} r={pointRadius} fill="#047857">
                               <title>Диастолическое: {point.diastolic}</title>
                             </circle>
                           </>
                         )}
                         {(chartType === 'all' || chartType === 'pulse') && (
-                          <circle cx={x} cy={yPulse} r="4" fill="#be123c">
+                          <circle cx={x} cy={yPulse} r={pointRadius} fill="#be123c">
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
