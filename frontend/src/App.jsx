@@ -158,16 +158,8 @@ function App() {
   }, [measurements]);
 
   const chartBounds = useMemo(() => {
-    if (chartPoints.length === 0) {
-      return { min: 0, max: 100, range: 100 };
-    }
-    const values = chartPoints.flatMap((point) => [point.systolic, point.diastolic, point.pulse]);
-    const minValue = Math.min(...values);
-    const maxValue = Math.max(...values);
-    const paddedMax = Math.ceil(maxValue / 10) * 10 + 10;
-    const paddedMin = Math.max(0, Math.floor(minValue / 10) * 10 - 10);
-    return { min: paddedMin, max: paddedMax, range: paddedMax - paddedMin };
-  }, [chartPoints]);
+    return { min: 60, max: 220, range: 160 };
+  }, []);
 
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
@@ -259,57 +251,6 @@ function App() {
             </div>
           </section>
 
-          <section className="data-section">
-            <h2>Замеры по дням</h2>
-            <div className="calendar-grid">
-              {Object.keys(groupedByDate).length === 0 ? (
-                <div className="empty-state">Нет замеров за выбранный период.</div>
-              ) : (
-                Object.entries(groupedByDate).map(([day, items]) => (
-                  <div key={day} className="day-card">
-                    <h3>{day}</h3>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Время</th>
-                          <th>Сист.</th>
-                          <th>Диаст.</th>
-                          <th>Пульс</th>
-                          <th>Заметки</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {items.map((item) => (
-                          <Fragment key={item.id}>
-                            <tr className="measurement-row">
-                              <td data-label="Время">{item.time}</td>
-                              <td data-label="Сист.">{item.systolic}</td>
-                              <td data-label="Диаст.">{item.diastolic}</td>
-                              <td data-label="Пульс">{item.pulse}</td>
-                              <td data-label="Заметки" className="notes-column">
-                                <span className="notes-text">{item.notes || '-'}</span>
-                                {item.notes && (
-                                  <button className="toggle-notes notes-toggle-button" onClick={() => toggleNotes(item.id)}>
-                                    {expandedRows.includes(item.id) ? 'Скрыть' : 'Показать'}
-                                  </button>
-                                )}
-                              </td>
-                            </tr>
-                            {expandedRows.includes(item.id) && item.notes && (
-                              <tr className="notes-row">
-                                <td colSpan={5}>{item.notes}</td>
-                              </tr>
-                            )}
-                          </Fragment>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ))
-              )}
-            </div>
-          </section>
-
           <section className="chart-card">
             <h2>График</h2>
             {chartPoints.length === 0 ? (
@@ -335,11 +276,11 @@ function App() {
                       <stop offset="100%" stopColor="#fca5a5" />
                     </linearGradient>
                   </defs>
-                  {[0, 1, 2, 3, 4].map((step) => {
+                  {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160].map((step) => {
                     const y =
                       chartDimensions.marginTop +
-                      ((chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom) * step) / 4;
-                    const value = Math.round(chartBounds.max - (chartBounds.range * step) / 4);
+                      ((chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom) * (160 - step)) / 160;
+                    const value = 60 + step;
                     return (
                       <g key={step}>
                         <line
@@ -413,6 +354,57 @@ function App() {
                 </div>
               </div>
             )}
+          </section>
+
+          <section className="data-section">
+            <h2>Замеры по дням</h2>
+            <div className="calendar-grid">
+              {Object.keys(groupedByDate).length === 0 ? (
+                <div className="empty-state">Нет замеров за выбранный период.</div>
+              ) : (
+                Object.entries(groupedByDate).map(([day, items]) => (
+                  <div key={day} className="day-card">
+                    <h3>{day}</h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Время</th>
+                          <th>Сист.</th>
+                          <th>Диаст.</th>
+                          <th>Пульс</th>
+                          <th>Заметки</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {items.map((item) => (
+                          <Fragment key={item.id}>
+                            <tr className="measurement-row">
+                              <td data-label="Время">{item.time}</td>
+                              <td data-label="Сист.">{item.systolic}</td>
+                              <td data-label="Диаст.">{item.diastolic}</td>
+                              <td data-label="Пульс">{item.pulse}</td>
+                              <td data-label="Заметки" className="notes-column">
+                                <span className="notes-text">{item.notes || '-'}</span>
+                                {item.notes && (
+                                  <button className="toggle-notes notes-toggle-button" onClick={() => toggleNotes(item.id)}>
+                                    {expandedRows.includes(item.id) ? 'Скрыть' : 'Показать'}
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                            {expandedRows.includes(item.id) && item.notes && (
+                              <tr className="notes-row">
+                                <td colSpan={5}>{item.notes}</td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))
+              )}
+            </div>
           </section>
         </main>
       )}
