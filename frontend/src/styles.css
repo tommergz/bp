@@ -119,6 +119,23 @@ textarea {
 .day-card table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.day-card th:nth-child(1),
+.day-card th:nth-child(2),
+.day-card th:nth-child(3),
+.day-card th:nth-child(4),
+.day-card td:nth-child(1),
+.day-card td:nth-child(2),
+.day-card td:nth-child(3),
+.day-card td:nth-child(4) {
+  width: 110px;
+}
+
+.day-card th:nth-child(5),
+.day-card td:nth-child(5) {
+  width: auto;
 }
 
 .day-card th,
