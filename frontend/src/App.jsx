@@ -41,6 +41,30 @@ function App() {
     fetchMeasurements();
   }, [session, rangeFrom, rangeTo]);
 
+  useEffect(() => {
+    if (!session) return;
+    
+    const token = session?.access_token;
+    if (!token) return;
+    
+    const initializeRange = async () => {
+      const res = await fetch(`${backendUrl}/api/measurements`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok || !data || data.length === 0) return;
+      
+      const dates = data.map(m => m.date).sort();
+      const minDate = dates[0];
+      const maxDate = dates[dates.length - 1];
+      
+      setRangeFrom(minDate);
+      setRangeTo(maxDate);
+    };
+    
+    initializeRange();
+  }, [session]);
+
   const token = session?.access_token;
 
   const fetchMeasurements = async () => {
