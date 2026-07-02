@@ -193,7 +193,7 @@ function App() {
 
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
-    const height = 300;
+    const height = 270;
     return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
   }, [chartPoints.length]);
 
@@ -207,9 +207,9 @@ function App() {
 
   const chartBoundsDesktop = useMemo(() => {
     if (chartType === 'pulse') {
-      return { min: 40, max: 160, range: 120 };
+      return { min: 40, max: 180, range: 140 };
     }
-    return { min: 70, max: 160, range: 90 };
+    return { min: 60, max: 220, range: 160 };
   }, [chartType]);
 
   const chartBoundsMobile = useMemo(() => {
@@ -365,7 +365,7 @@ function App() {
                         ((chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom) *
                           (chartBounds.range - step)) /
                           chartBounds.range;
-                      const isHighlighted = value === 80 || value === 120;
+                      const isHighlighted = (value === 80 || value === 120) && chartType !== 'pulse';
                       return (
                         <g key={value}>
                           <line
