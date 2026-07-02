@@ -162,7 +162,7 @@ function App() {
       items.sort((a, b) => {
         const timeA = new Date(a.created_at || a.date).getTime();
         const timeB = new Date(b.created_at || b.date).getTime();
-        return timeA - timeB;
+        return timeB - timeA;
       });
     });
 
@@ -350,14 +350,14 @@ function App() {
                             strokeDasharray={isHighlighted ? '5 5' : '3 4'}
                             strokeWidth={isHighlighted ? '2' : '1'}
                           />
-                          <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#374151">
+                          <text x={chartDimensions.marginLeft - 8} y={y + 4} textAnchor="end" fontSize="14" fill="#374151">
                             {value}
                           </text>
                           <text
                             x={chartDimensions.width - chartDimensions.marginRight + 12}
                             y={y + 4}
                             textAnchor="start"
-                            fontSize="10"
+                            fontSize="14"
                             fill="#374151"
                           >
                             {value}
@@ -429,7 +429,7 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </>
                         )}
-                        <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="10" fill="#475569">
+                        <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="14" fill="#475569">
                           {point.date}
                         </text>
                       </g>
