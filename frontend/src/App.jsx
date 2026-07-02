@@ -417,17 +417,18 @@ function App() {
                       <g key={`${point.timestamp}-${point.systolic}-${point.diastolic}-${point.pulse}`}>
                         {(chartType === 'all' || chartType === 'bloodPressure') && (
                           <>
-                            <circle cx={x} cy={ySystolic} r="4" fill="#2563eb" />
-                            <title>Систолическое: {point.systolic}</title>
-                            <circle cx={x} cy={yDiastolic} r="4" fill="#047857" />
-                            <title>Диастолическое: {point.diastolic}</title>
+                            <circle cx={x} cy={ySystolic} r="4" fill="#2563eb">
+                              <title>Систолическое: {point.systolic}</title>
+                            </circle>
+                            <circle cx={x} cy={yDiastolic} r="4" fill="#047857">
+                              <title>Диастолическое: {point.diastolic}</title>
+                            </circle>
                           </>
                         )}
                         {(chartType === 'all' || chartType === 'pulse') && (
-                          <>
-                            <circle cx={x} cy={yPulse} r="4" fill="#be123c" />
+                          <circle cx={x} cy={yPulse} r="4" fill="#be123c">
                             <title>Пульс: {point.pulse}</title>
-                          </>
+                          </circle>
                         )}
                         <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="14" fill="#475569">
                           {point.date}
