@@ -418,10 +418,17 @@ function App() {
                         {(chartType === 'all' || chartType === 'bloodPressure') && (
                           <>
                             <circle cx={x} cy={ySystolic} r="4" fill="#2563eb" />
+                            <title>Систолическое: {point.systolic}</title>
                             <circle cx={x} cy={yDiastolic} r="4" fill="#047857" />
+                            <title>Диастолическое: {point.diastolic}</title>
                           </>
                         )}
-                        {(chartType === 'all' || chartType === 'pulse') && <circle cx={x} cy={yPulse} r="4" fill="#be123c" />}
+                        {(chartType === 'all' || chartType === 'pulse') && (
+                          <>
+                            <circle cx={x} cy={yPulse} r="4" fill="#be123c" />
+                            <title>Пульс: {point.pulse}</title>
+                          </>
+                        )}
                         <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize="10" fill="#475569">
                           {point.date}
                         </text>
