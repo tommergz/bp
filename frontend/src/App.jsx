@@ -200,11 +200,12 @@ function App() {
 
   const chartDimensions = useMemo(() => {
     const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
-    const height = isMobile ? 720 : 400;
+    const height = isMobile ? 720 : 550;
     const marginRight = isMobile ? 40 : 90;
     const marginLeft = isMobile ? 40 : 40;
     const marginBottom = isMobile ? 40 : 80;
-    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom };
+    const lineStroke = isMobile ? 3 : 2;
+    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom, lineStroke };
   }, [chartPoints.length, isMobile]);
 
   const buildLinePath = (key) => {
@@ -386,14 +387,14 @@ function App() {
                         d={buildLinePath('systolic')}
                         fill="none"
                         stroke="url(#lineGradientSystolic)"
-                        strokeWidth="3"
+                        strokeWidth={chartDimensions.lineStroke}
                         strokeLinecap="round"
                       />
                       <path
                         d={buildLinePath('diastolic')}
                         fill="none"
                         stroke="url(#lineGradientDiastolic)"
-                        strokeWidth="3"
+                        strokeWidth={chartDimensions.lineStroke}
                         strokeLinecap="round"
                       />
                     </>
@@ -404,7 +405,7 @@ function App() {
                       d={buildLinePath('pulse')}
                       fill="none"
                       stroke="url(#lineGradientPulse)"
-                      strokeWidth="3"
+                      strokeWidth={chartDimensions.lineStroke}
                       strokeLinecap="round"
                     />
                   )}
