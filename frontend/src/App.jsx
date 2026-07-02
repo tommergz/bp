@@ -191,22 +191,35 @@ function App() {
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [measurements]);
 
-  const chartBounds = useMemo(() => {
+  const chartDimensionsDesktop = useMemo(() => {
+    const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
+    const height = 300;
+    return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
+  }, [chartPoints.length]);
+
+  const chartDimensionsMobile = useMemo(() => {
+    const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
+    const height = 720;
+    return { width, height, marginLeft: 40, marginRight: 40, marginTop: 10, marginBottom: 40, lineStroke: 3 };
+  }, [chartPoints.length]);
+
+  const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
+
+  const chartBoundsDesktop = useMemo(() => {
+    if (chartType === 'pulse') {
+      return { min: 40, max: 160, range: 120 };
+    }
+    return { min: 70, max: 160, range: 90 };
+  }, [chartType]);
+
+  const chartBoundsMobile = useMemo(() => {
     if (chartType === 'pulse') {
       return { min: 40, max: 180, range: 140 };
     }
     return { min: 60, max: 220, range: 160 };
   }, [chartType]);
 
-  const chartDimensions = useMemo(() => {
-    const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
-    const height = isMobile ? 720 : 550;
-    const marginRight = isMobile ? 40 : 90;
-    const marginLeft = isMobile ? 40 : 40;
-    const marginBottom = isMobile ? 40 : 80;
-    const lineStroke = isMobile ? 3 : 2;
-    return { width, height, marginLeft, marginRight, marginTop: 10, marginBottom, lineStroke };
-  }, [chartPoints.length, isMobile]);
+  const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
