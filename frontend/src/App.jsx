@@ -193,7 +193,7 @@ function App() {
 
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
-    const height = chartPoints.length > 20 ? 360 : 360;
+    const height = 360;
     return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
   }, [chartPoints.length]);
 

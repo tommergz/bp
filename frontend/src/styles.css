@@ -196,18 +196,20 @@ textarea {
   background: #f8fafc;
   border-radius: 18px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .line-chart.line-chart-scrollable svg {
   flex-shrink: 0;
   width: auto;
+  max-width: none;
 }
 
 .line-chart svg {
-  width: 100%;
-  max-width: 100%;
   display: block;
   height: auto;
+  width: auto;
+  max-width: none;
 }
 
 .line-chart-legend {
