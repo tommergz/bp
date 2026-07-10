@@ -200,9 +200,10 @@ function App() {
     chartPoints.forEach((point, index) => {
       if (!currentGroup || currentGroup.date !== point.date) {
         if (currentGroup) groups.push(currentGroup);
-        currentGroup = { date: point.date, startIndex: index, endIndex: index };
+        currentGroup = { date: point.date, startIndex: index, endIndex: index, points: [index] };
       } else {
         currentGroup.endIndex = index;
+        currentGroup.points.push(index);
       }
     });
 
@@ -369,12 +370,9 @@ function App() {
                     const innerHeight = chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom;
                     const stepCount = Math.max(chartPoints.length - 1, 1);
                     return chartDateBands.map((band) => {
-                      const startX = chartDimensions.marginLeft + (innerWidth * band.startIndex) / stepCount;
-                      const endX = chartDimensions.marginLeft + (innerWidth * band.endIndex) / stepCount;
-                      const bandStart = startX + (band.startIndex === band.endIndex ? 0 : (endX - startX) / 2);
-                      const bandEnd = band.startIndex === band.endIndex
-                        ? startX + 1
-                        : chartDimensions.marginLeft + (innerWidth * (band.endIndex + 1)) / stepCount - (endX - startX) / 2;
+                      const pointXs = band.points.map((index) => chartDimensions.marginLeft + (innerWidth * index) / stepCount);
+                      const bandStart = pointXs[0] - (pointXs[1] - pointXs[0]) / 2;
+                      const bandEnd = pointXs[pointXs.length - 1] + (pointXs[pointXs.length - 1] - pointXs[pointXs.length - 2]) / 2;
                       return (
                         <rect
                           key={`band-${band.date}`}
