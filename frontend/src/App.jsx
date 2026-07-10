@@ -510,12 +510,16 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        <text x={x} y={chartDimensions.height - (isMobile ? 36 : 28)} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
-                          <tspan x={x} dy="0">{formatLabelDate(point.date)}</tspan>
-                          {isMobile && (
+                        {isMobile ? (
+                          <text x={x} y={chartDimensions.height - 36} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                            <tspan x={x} dy="0">{formatLabelDate(point.date)}</tspan>
                             <tspan x={x} dy="10">{new Date(point.date).getFullYear()}</tspan>
-                          )}
-                        </text>
+                          </text>
+                        ) : (
+                          <text x={x} y={chartDimensions.height - 28} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                            {new Date(point.date).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                          </text>
+                        )}
                         <text x={x} y={chartDimensions.height - (isMobile ? 12 : 10)} textAnchor="middle" fontSize={fontSizeChart - 1} fill="#64748b">
                           {point.time}
                         </text>
