@@ -191,6 +191,29 @@ function App() {
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [measurements]);
 
+  const chartDateBands = useMemo(() => {
+    if (chartPoints.length === 0) return [];
+
+    const groups = [];
+    let currentGroup = null;
+
+    chartPoints.forEach((point, index) => {
+      if (!currentGroup || currentGroup.date !== point.date) {
+        if (currentGroup) groups.push(currentGroup);
+        currentGroup = { date: point.date, startIndex: index, endIndex: index };
+      } else {
+        currentGroup.endIndex = index;
+      }
+    });
+
+    if (currentGroup) groups.push(currentGroup);
+
+    return groups.map((group, index) => ({
+      ...group,
+      fill: index % 2 === 0 ? '#f8fafc' : '#eef2ff',
+    }));
+  }, [chartPoints]);
+
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
     const height = 360;
@@ -345,17 +368,17 @@ function App() {
                     const innerWidth = chartDimensions.width - chartDimensions.marginLeft - chartDimensions.marginRight;
                     const innerHeight = chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom;
                     const stepCount = Math.max(chartPoints.length - 1, 1);
-                    return Array.from({ length: chartPoints.length - 1 }, (_, index) => {
-                      const x0 = chartDimensions.marginLeft + (innerWidth * index) / stepCount;
-                      const x1 = chartDimensions.marginLeft + (innerWidth * (index + 1)) / stepCount;
+                    return chartDateBands.map((band) => {
+                      const x0 = chartDimensions.marginLeft + (innerWidth * band.startIndex) / stepCount;
+                      const x1 = chartDimensions.marginLeft + (innerWidth * band.endIndex) / stepCount;
                       return (
                         <rect
-                          key={`band-${index}`}
+                          key={`band-${band.date}`}
                           x={x0}
                           y={chartDimensions.marginTop}
-                          width={Math.max(1, x1 - x0)}
+                          width={Math.max(1, x1 - x0 + 1)}
                           height={innerHeight}
-                          fill={index % 2 === 0 ? '#f8fafc' : '#eef2ff'}
+                          fill={band.fill}
                         />
                       );
                     });
