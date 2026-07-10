@@ -222,9 +222,9 @@ function App() {
   }, [chartPoints.length]);
 
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(280, Math.max(1, chartPoints.length) * 62);
-    const height = 540;
-    return { width, height, marginLeft: 34, marginRight: 24, marginTop: 10, marginBottom: 48, lineStroke: 2.2 };
+    const width = Math.max(320, Math.max(1, chartPoints.length) * 48);
+    const height = 360;
+    return { width, height, marginLeft: 30, marginRight: 20, marginTop: 10, marginBottom: 44, lineStroke: 1.8 };
   }, [chartPoints.length]);
 
   const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
@@ -245,8 +245,8 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const pointRadius = isMobile ? 3 : 2.8;
-  const fontSizeChart = isMobile ? 11 : 10;
+  const pointRadius = isMobile ? 2.6 : 2.8;
+  const fontSizeChart = isMobile ? 10 : 10;
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
