@@ -228,9 +228,9 @@ function App() {
   };
 
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(420, Math.max(1, chartPoints.length) * 32);
+    const width = Math.max(280, Math.max(1, chartPoints.length) * 22);
     const height = 360;
-    return { width, height, marginLeft: 34, marginRight: 42, marginTop: 10, marginBottom: 56, lineStroke: 1.6 };
+    return { width, height, marginLeft: 32, marginRight: 32, marginTop: 10, marginBottom: 60, lineStroke: 1.4 };
   }, [chartPoints.length]);
 
   const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
@@ -251,7 +251,7 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const pointRadius = isMobile ? 1.6 : 2.8;
+  const pointRadius = isMobile ? 1.2 : 2.8;
   const fontSizeChart = isMobile ? 7 : 10;
 
   const buildLinePath = (key) => {
@@ -510,10 +510,11 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        <text x={x} y={chartDimensions.height - (isMobile ? 24 : 28)} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
-                          {isMobile ? formatLabelDate(point.date) : point.date}
+                        <text x={x} y={chartDimensions.height - (isMobile ? 34 : 28)} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                          <tspan x={x} dy="0">{formatLabelDate(point.date)}</tspan>
+                          <tspan x={x} dy="10">{new Date(point.date).getFullYear()}</tspan>
                         </text>
-                        <text x={x} y={chartDimensions.height - (isMobile ? 12 : 10)} textAnchor="middle" fontSize={fontSizeChart} fill="#64748b">
+                        <text x={x} y={chartDimensions.height - (isMobile ? 8 : 10)} textAnchor="middle" fontSize={fontSizeChart - 1} fill="#64748b">
                           {point.time}
                         </text>
                       </g>
