@@ -221,10 +221,16 @@ function App() {
     return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
   }, [chartPoints.length]);
 
+  const formatLabelDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    return date.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
+  };
+
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(320, Math.max(1, chartPoints.length) * 30);
+    const width = Math.max(320, Math.max(1, chartPoints.length) * 28);
     const height = 360;
-    return { width, height, marginLeft: 36, marginRight: 36, marginTop: 10, marginBottom: 48, lineStroke: 1.8 };
+    return { width, height, marginLeft: 26, marginRight: 18, marginTop: 10, marginBottom: 48, lineStroke: 1.8 };
   }, [chartPoints.length]);
 
   const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
@@ -245,8 +251,8 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const pointRadius = isMobile ? 2.2 : 2.8;
-  const fontSizeChart = isMobile ? 9 : 10;
+  const pointRadius = isMobile ? 1.8 : 2.8;
+  const fontSizeChart = isMobile ? 8 : 10;
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
@@ -358,7 +364,7 @@ function App() {
             {chartPoints.length === 0 ? (
               <div className="empty-state">Нет данных для графика.</div>
             ) : (
-              <div className={`line-chart ${chartPoints.length > 20 ? 'line-chart-scrollable' : ''}`}>
+              <div className={`line-chart ${chartPoints.length > 10 ? 'line-chart-scrollable' : ''}`}>
                 <svg
                   width={chartDimensions.width}
                   height={chartDimensions.height}
@@ -504,12 +510,10 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        {!isMobile && (
-                          <text x={x} y={chartDimensions.height - 28} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
-                            {point.date}
-                          </text>
-                        )}
-                        <text x={x} y={chartDimensions.height - (isMobile ? 16 : 10)} textAnchor="middle" fontSize={fontSizeChart - (isMobile ? 0 : 1)} fill="#64748b">
+                        <text x={x} y={chartDimensions.height - (isMobile ? 24 : 28)} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                          {isMobile ? formatLabelDate(point.date) : point.date}
+                        </text>
+                        <text x={x} y={chartDimensions.height - (isMobile ? 12 : 10)} textAnchor="middle" fontSize={fontSizeChart - (isMobile ? 1 : 1)} fill="#64748b">
                           {point.time}
                         </text>
                       </g>
