@@ -222,7 +222,7 @@ function App() {
   }, [chartPoints.length]);
 
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(320, Math.max(1, chartPoints.length) * 36);
+    const width = Math.max(320, Math.max(1, chartPoints.length) * 30);
     const height = 360;
     return { width, height, marginLeft: 36, marginRight: 36, marginTop: 10, marginBottom: 48, lineStroke: 1.8 };
   }, [chartPoints.length]);
@@ -245,7 +245,7 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const pointRadius = isMobile ? 2.4 : 2.8;
+  const pointRadius = isMobile ? 2.2 : 2.8;
   const fontSizeChart = isMobile ? 9 : 10;
 
   const buildLinePath = (key) => {
@@ -504,10 +504,12 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        <text x={x} y={chartDimensions.height - 28} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
-                          {point.date}
-                        </text>
-                        <text x={x} y={chartDimensions.height - 10} textAnchor="middle" fontSize={fontSizeChart - 1} fill="#64748b">
+                        {!isMobile && (
+                          <text x={x} y={chartDimensions.height - 28} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                            {point.date}
+                          </text>
+                        )}
+                        <text x={x} y={chartDimensions.height - (isMobile ? 16 : 10)} textAnchor="middle" fontSize={fontSizeChart - (isMobile ? 0 : 1)} fill="#64748b">
                           {point.time}
                         </text>
                       </g>
