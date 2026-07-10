@@ -228,9 +228,9 @@ function App() {
   };
 
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(320, Math.max(1, chartPoints.length) * 28);
+    const width = Math.max(420, Math.max(1, chartPoints.length) * 32);
     const height = 360;
-    return { width, height, marginLeft: 26, marginRight: 18, marginTop: 10, marginBottom: 48, lineStroke: 1.8 };
+    return { width, height, marginLeft: 34, marginRight: 42, marginTop: 10, marginBottom: 56, lineStroke: 1.6 };
   }, [chartPoints.length]);
 
   const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
@@ -251,8 +251,8 @@ function App() {
 
   const chartBounds = isMobile ? chartBoundsMobile : chartBoundsDesktop;
 
-  const pointRadius = isMobile ? 1.8 : 2.8;
-  const fontSizeChart = isMobile ? 8 : 10;
+  const pointRadius = isMobile ? 1.6 : 2.8;
+  const fontSizeChart = isMobile ? 7 : 10;
 
   const buildLinePath = (key) => {
     if (chartPoints.length === 0) return '';
@@ -513,7 +513,7 @@ function App() {
                         <text x={x} y={chartDimensions.height - (isMobile ? 24 : 28)} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
                           {isMobile ? formatLabelDate(point.date) : point.date}
                         </text>
-                        <text x={x} y={chartDimensions.height - (isMobile ? 12 : 10)} textAnchor="middle" fontSize={fontSizeChart - (isMobile ? 1 : 1)} fill="#64748b">
+                        <text x={x} y={chartDimensions.height - (isMobile ? 12 : 10)} textAnchor="middle" fontSize={fontSizeChart} fill="#64748b">
                           {point.time}
                         </text>
                       </g>
