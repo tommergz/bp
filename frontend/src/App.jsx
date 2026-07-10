@@ -369,14 +369,18 @@ function App() {
                     const innerHeight = chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom;
                     const stepCount = Math.max(chartPoints.length - 1, 1);
                     return chartDateBands.map((band) => {
-                      const x0 = chartDimensions.marginLeft + (innerWidth * band.startIndex) / stepCount;
-                      const x1 = chartDimensions.marginLeft + (innerWidth * band.endIndex) / stepCount;
+                      const startX = chartDimensions.marginLeft + (innerWidth * band.startIndex) / stepCount;
+                      const endX = chartDimensions.marginLeft + (innerWidth * band.endIndex) / stepCount;
+                      const bandStart = startX + (band.startIndex === band.endIndex ? 0 : (endX - startX) / 2);
+                      const bandEnd = band.startIndex === band.endIndex
+                        ? startX + 1
+                        : chartDimensions.marginLeft + (innerWidth * (band.endIndex + 1)) / stepCount - (endX - startX) / 2;
                       return (
                         <rect
                           key={`band-${band.date}`}
-                          x={x0}
+                          x={bandStart}
                           y={chartDimensions.marginTop}
-                          width={Math.max(1, x1 - x0 + 1)}
+                          width={Math.max(1, bandEnd - bandStart)}
                           height={innerHeight}
                           fill={band.fill}
                         />
