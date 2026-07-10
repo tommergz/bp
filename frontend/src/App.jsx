@@ -198,9 +198,9 @@ function App() {
   }, [chartPoints.length]);
 
   const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(320, Math.max(1, chartPoints.length) * 90);
-    const height = 720;
-    return { width, height, marginLeft: 40, marginRight: 40, marginTop: 10, marginBottom: 40, lineStroke: 3 };
+    const width = Math.max(280, Math.max(1, chartPoints.length) * 62);
+    const height = 540;
+    return { width, height, marginLeft: 34, marginRight: 24, marginTop: 10, marginBottom: 48, lineStroke: 2.2 };
   }, [chartPoints.length]);
 
   const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
@@ -341,6 +341,25 @@ function App() {
                   viewBox={`0 0 ${chartDimensions.width} ${chartDimensions.height}`}
                   preserveAspectRatio="xMidYMid meet"
                 >
+                  {(() => {
+                    const innerWidth = chartDimensions.width - chartDimensions.marginLeft - chartDimensions.marginRight;
+                    const innerHeight = chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom;
+                    const stepCount = Math.max(chartPoints.length - 1, 1);
+                    return Array.from({ length: chartPoints.length - 1 }, (_, index) => {
+                      const x0 = chartDimensions.marginLeft + (innerWidth * index) / stepCount;
+                      const x1 = chartDimensions.marginLeft + (innerWidth * (index + 1)) / stepCount;
+                      return (
+                        <rect
+                          key={`band-${index}`}
+                          x={x0}
+                          y={chartDimensions.marginTop}
+                          width={Math.max(1, x1 - x0)}
+                          height={innerHeight}
+                          fill={index % 2 === 0 ? '#f8fafc' : '#eef2ff'}
+                        />
+                      );
+                    });
+                  })()}
                   <defs>
                     <linearGradient id="lineGradientSystolic" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#2563eb" />
@@ -460,8 +479,11 @@ function App() {
                             <title>Пульс: {point.pulse}</title>
                           </circle>
                         )}
-                        <text x={x} y={chartDimensions.height - 20} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
+                        <text x={x} y={chartDimensions.height - 28} textAnchor="middle" fontSize={fontSizeChart} fill="#475569">
                           {point.date}
+                        </text>
+                        <text x={x} y={chartDimensions.height - 10} textAnchor="middle" fontSize={fontSizeChart - 1} fill="#64748b">
+                          {point.time}
                         </text>
                       </g>
                     );
