@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -25,6 +25,7 @@ function App() {
   const [error, setError] = useState('');
   const [chartType, setChartType] = useState('all'); // 'all', 'bloodPressure', 'pulse'
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+  const chartContainerRef = useRef(null);
 
   useEffect(() => {
     const sessionData = supabase.auth.session();
@@ -73,6 +74,15 @@ function App() {
     
     initializeRange();
   }, [session]);
+
+  useEffect(() => {
+    if (!session) return;
+    const element = chartContainerRef.current;
+    if (!element) return;
+    window.requestAnimationFrame(() => {
+      element.scrollLeft = element.scrollWidth;
+    });
+  }, [measurements, isMobile]);
 
   const token = session?.access_token;
 
@@ -364,7 +374,7 @@ function App() {
             {chartPoints.length === 0 ? (
               <div className="empty-state">Нет данных для графика.</div>
             ) : (
-              <div className={`line-chart ${chartPoints.length > 10 ? 'line-chart-scrollable' : ''}`}>
+              <div ref={chartContainerRef} className={`line-chart ${chartPoints.length > 10 ? 'line-chart-scrollable' : ''}`}>
                 <svg
                   width={chartDimensions.width}
                   height={chartDimensions.height}
@@ -377,8 +387,11 @@ function App() {
                     const stepCount = Math.max(chartPoints.length - 1, 1);
                     return chartDateBands.map((band) => {
                       const pointXs = band.points.map((index) => chartDimensions.marginLeft + (innerWidth * index) / stepCount);
-                      const bandStart = pointXs[0] - (pointXs[1] - pointXs[0]) / 2;
-                      const bandEnd = pointXs[pointXs.length - 1] + (pointXs[pointXs.length - 1] - pointXs[pointXs.length - 2]) / 2;
+                      const firstX = pointXs[0];
+                      const lastX = pointXs[pointXs.length - 1];
+                      const delta = pointXs.length > 1 ? pointXs[1] - pointXs[0] : innerWidth / 2;
+                      const bandStart = firstX - delta / 2;
+                      const bandEnd = lastX + delta / 2;
                       return (
                         <rect
                           key={`band-${band.date}`}
