@@ -201,6 +201,20 @@ function App() {
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [measurements]);
 
+  const chartDimensionsDesktop = useMemo(() => {
+    const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
+    const height = 360;
+    return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
+  }, [chartPoints.length]);
+
+  const chartDimensionsMobile = useMemo(() => {
+    const width = Math.max(280, Math.max(1, chartPoints.length) * 22);
+    const height = 360;
+    return { width, height, marginLeft: 32, marginRight: 32, marginTop: 10, marginBottom: 60, lineStroke: 1.4 };
+  }, [chartPoints.length]);
+
+  const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
+
   const chartDateBands = useMemo(() => {
     if (chartPoints.length === 0) return [];
 
@@ -243,25 +257,11 @@ function App() {
     });
   }, [chartPoints, chartDimensions]);
 
-  const chartDimensionsDesktop = useMemo(() => {
-    const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
-    const height = 360;
-    return { width, height, marginLeft: 45, marginRight: 45, marginTop: 10, marginBottom: 50, lineStroke: 1.5 };
-  }, [chartPoints.length]);
-
   const formatLabelDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
     return date.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
   };
-
-  const chartDimensionsMobile = useMemo(() => {
-    const width = Math.max(280, Math.max(1, chartPoints.length) * 22);
-    const height = 360;
-    return { width, height, marginLeft: 32, marginRight: 32, marginTop: 10, marginBottom: 60, lineStroke: 1.4 };
-  }, [chartPoints.length]);
-
-  const chartDimensions = isMobile ? chartDimensionsMobile : chartDimensionsDesktop;
 
   const chartBoundsDesktop = useMemo(() => {
     if (chartType === 'pulse') {
