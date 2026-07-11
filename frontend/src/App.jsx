@@ -210,20 +210,38 @@ function App() {
     chartPoints.forEach((point, index) => {
       if (!currentGroup || currentGroup.date !== point.date) {
         if (currentGroup) groups.push(currentGroup);
-        currentGroup = { date: point.date, startIndex: index, endIndex: index, points: [index] };
+        currentGroup = { date: point.date, startIndex: index, endIndex: index };
       } else {
         currentGroup.endIndex = index;
-        currentGroup.points.push(index);
       }
     });
 
     if (currentGroup) groups.push(currentGroup);
 
-    return groups.map((group, index) => ({
-      ...group,
-      fill: index % 2 === 0 ? '#f8fafc' : '#eef2ff',
-    }));
-  }, [chartPoints]);
+    const { width, marginLeft, marginRight } = chartDimensions;
+    const innerWidth = width - marginLeft - marginRight;
+    const totalSteps = Math.max(chartPoints.length - 1, 1);
+
+    const xPos = (index) => marginLeft + (innerWidth * index) / totalSteps;
+
+    return groups.map((group, index) => {
+      const startX =
+        group.startIndex === 0
+          ? marginLeft
+          : (xPos(group.startIndex - 1) + xPos(group.startIndex)) / 2;
+      const endX =
+        group.endIndex === chartPoints.length - 1
+          ? width - marginRight
+          : (xPos(group.endIndex) + xPos(group.endIndex + 1)) / 2;
+
+      return {
+        ...group,
+        x: startX,
+        bandWidth: Math.max(1, endX - startX),
+        fill: index % 2 === 0 ? '#f8fafc' : '#eef2ff',
+      };
+    });
+  }, [chartPoints, chartDimensions]);
 
   const chartDimensionsDesktop = useMemo(() => {
     const width = Math.max(400, Math.max(1, chartPoints.length) * 80);
@@ -385,19 +403,23 @@ function App() {
                     const innerWidth = chartDimensions.width - chartDimensions.marginLeft - chartDimensions.marginRight;
                     const innerHeight = chartDimensions.height - chartDimensions.marginTop - chartDimensions.marginBottom;
                     const stepCount = Math.max(chartPoints.length - 1, 1);
-                    return chartDateBands.map((band) => {
-                      const pointXs = band.points.map((index) => chartDimensions.marginLeft + (innerWidth * index) / stepCount);
-                      const firstX = pointXs[0];
-                      const lastX = pointXs[pointXs.length - 1];
-                      const delta = pointXs.length > 1 ? pointXs[1] - pointXs[0] : innerWidth / 2;
-                      const bandStart = firstX - delta / 2;
-                      const bandEnd = lastX + delta / 2;
+                    return chartDateBands.map((band, bandIndex) => {
+                      const x = (index) => chartDimensions.marginLeft + (innerWidth * index) / stepCount;
+                      const startX =
+                        band.startIndex === 0
+                          ? chartDimensions.marginLeft
+                          : (x(band.startIndex - 1) + x(band.startIndex)) / 2;
+                      const endX =
+                        band.endIndex === chartPoints.length - 1
+                          ? chartDimensions.width - chartDimensions.marginRight
+                          : (x(band.endIndex) + x(band.endIndex + 1)) / 2;
+
                       return (
                         <rect
-                          key={`band-${band.date}`}
-                          x={bandStart}
+                          key={`band-${band.date}-${bandIndex}`}
+                          x={startX}
                           y={chartDimensions.marginTop}
-                          width={Math.max(1, bandEnd - bandStart)}
+                          width={Math.max(1, endX - startX)}
                           height={innerHeight}
                           fill={band.fill}
                         />
